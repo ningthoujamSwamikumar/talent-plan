@@ -1,0 +1,13 @@
+[server]
+host = "0.0.0.0"
+port = 3000
+shutdown_timeout_secs = 30
+
+[database]
+url = "postgres://localhost:5432/taskforge"
+max_connections = 10
+
+[features]
+enable_search = true
+enable_websockets = false
+max_tasks_per_project = 50

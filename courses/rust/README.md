@@ -1,118 +1,155 @@
-# Practical Networked Applications in Rust
+# Rust Backend Engineering: From Beginner to Senior
 
-A training course about practical systems software construction in [Rust].
+A comprehensive training course that takes you from Rust beginner to production-ready
+senior backend engineer through 26 hands-on projects across 8 phases.
 
-Over a series of projects, you will build a single networked, multithreaded, and
-asynchronous Rust application. Creating this application, a [key-value
-database][kv], will provide opportunities to exercise the best of the crate
-ecosystem, a variety of concurrent data types, the world of async Rust,
-interesting language features, and important Rust tools. In between projects are
-small lessons and exercises on the subjects necessary to complete the next
-project.
+Over a series of progressively challenging projects, you will build systems software,
+web APIs, production infrastructure, and distributed systems in Rust. Each project
+includes a complete test suite — you learn by making tests pass. In between projects
+are building blocks: curated readings and exercises on the subjects necessary to
+complete the next project.
 
-<!-- TODO make the above sparkle -->
-<!-- NOTE: keep the above in sync with lesson-plan.md -->
+**[View the full lesson plan][plan]**.
 
-Subjects covered include:
 
-- Structuring and maintaining Rust programs
-- Applying common tools like [clippy] and [rustfmt]
-- Best practices in Rust error handling
-- Serialization with [serde]
-- Simple log-structured storage, inspired by [bitcask]
-- Network programming with std and [tokio]
-- Benchmarking with [criterion]
-- Fun and foolproof parallel programming with [crossbeam] and more
-- Asyncronous programming with Rust [futures]
-- How to learn what you don't know about Rust and find the documentation and
-  crates you need to succeed
+## What this course covers
 
-After completing this course you will have the knowledge and experience to begin
-writing high performance, reliable, systems software in Rust. And you might
-discover that doing so is simpler than you expected.
+### Phase 0: Rust Foundations
+Ownership, borrowing, lifetimes, traits, generics, iterators, closures, smart pointers,
+and macros. Four focused projects for programmers new to Rust.
 
-_**Important note: Practical Networked Applications in Rust is in an alpha
-state**. It contains bugs and its scope is limited. If you are taking it now you
-are brave, but you are also an early tester and your feedback is greatly
-appreciated. As you are following along please [file issues]<!-- TODO and
-complete the [post-project surveys] -->. You are also encouraged to fix problems
-on your own and submit pull requests. See [CONTRIBUTING.md] for details.<!-- See
-[the roadmap] for details about future course subject matter.-->_
+### Phase 1: Systems Programming
+Build a networked, multithreaded, asynchronous key-value store from scratch across five
+projects. Covers serialization, file I/O, networking, concurrency, and async Rust.
 
-**[View the lesson plan][plan]**.
+### Phase 2: Backend Web Development
+Build a task management API with axum, PostgreSQL (sqlx), JWT authentication, gRPC
+(tonic), and GraphQL (async-graphql). Four projects covering the full backend stack.
+
+### Phase 3: Production Engineering
+Make your service production-grade: observability (tracing + metrics), advanced testing
+(property-based, fuzzing, snapshots), performance profiling, and deployment (Docker, CI/CD,
+graceful shutdown).
+
+### Phase 4: Advanced Backend Patterns
+Message queues and event-driven architecture, caching and rate limiting, WebSockets and
+real-time systems, background job processing. The patterns that distinguish senior from
+mid-level engineers.
+
+### Phase 5: Distributed Systems
+Implement the Raft consensus algorithm, Percolator distributed transactions, and build
+a service mesh with service discovery, distributed tracing, and saga orchestration.
+
+### Phase 6: Senior Engineering Skills
+API design and versioning with OpenAPI, security hardening (OWASP), system design
+practice, and interview preparation.
+
+### Phase 7: Capstone
+Build a complete, production-grade, real-time collaborative project management platform
+integrating every skill from the course. Evaluated on correctness, performance, and
+operational readiness.
 
 
 ## The goal of this course
 
-The goal of this course is to teach new Rust programmers how to build real-world
-[systems programs][sp], with all the desirable Rust characteristics, including
-high-performance, reliability, and easy concurrency; and to do so using the best
-practices that might not be evident to newcomers.
+The goal is to prepare you for a **senior remote Rust backend engineer role**. After
+completing this course, you will be able to:
 
-Non-goals of this course include teaching installation, syntax, and other Rust
-basics; teaching basic data structures and algorithms; teaching basic parallel
-and asynchronous programming concepts; and being a comprehensive resource on the
-Rust language. That information is easily found in [The Rust Book] and
-elsewhere.
+- Design and build production REST, gRPC, and GraphQL APIs
+- Work with PostgreSQL, Redis, and message queues
+- Implement authentication, authorization, and security hardening
+- Write comprehensive tests (unit, integration, property-based, fuzzing)
+- Profile and optimize Rust services for performance
+- Deploy containerized services with observability
+- Build distributed systems with consensus and distributed transactions
+- Make architectural decisions and articulate tradeoffs
+- Pass system design interviews and Rust-specific technical interviews
 
-**[View the lesson plan][plan]**.
+This is not a theoretical course. Every concept is practiced through building real
+software with real test suites.
 
 
 ## Who is this for?
 
-Practical Networked Applications in Rust is for novice _Rust_ programmers, but it
-is not for novice programmers.
+This course is designed for:
 
-The primary audience of this course is recent graduates and near-graduates of
-an undergraduate computer science program who are considering starting a career
-as a Rust systems programmer. Others will also likely benefit, including
-experienced developers without systems programming experience.
+- **Programmers new to Rust** who want to become professional Rust backend engineers
+- **Backend engineers** from other languages (Go, Python, TypeScript, Java) transitioning to Rust
+- **Systems programmers** who want to add web backend skills
+- **Students** preparing for Rust backend engineering roles
+
+If you have programming experience in any language and can use a terminal and git,
+you can start this course. Phase 0 teaches Rust fundamentals — you don't need prior
+Rust experience, though reading [The Rust Book] first is recommended.
 
 
 ## Prerequisites
 
-Those taking this course should:
+- [ ] Intermediate programming experience in any language
+- [ ] Comfortable with the terminal and command line
+- [ ] Know how to use [git]
+- [ ] **Recommended**: Read [The Rust Book] (at minimum chapters 1-10)
+- [ ] **For Phase 2+**: Basic SQL knowledge
+- [ ] **For Phase 5**: Understanding of networking fundamentals
 
-- [ ] have the equivalent of an undergraduate computer science education,
-- [ ] have intermediate-level experience in some programming language,
-- [ ] be comfortable working in the terminal and command line,
-- [ ] know how to use [git],
-- [ ] have novice-level experience with [parallel programming] in some language,
-- [ ] have novice-level experience with [asynchronous programming] in some language,
-- [ ] have novice-level experience writing code to query a database, [SQL],
-  [NoSQL], [NewSQL], [key-value][kv], or otherwise.
-- [ ] **have read [The Rust Book] in its entirety**,
-- [ ] have written _some_ Rust code, including the projects from the book:
-  - [programming a guessing game],
-  - [building a command-line program] and
-  - [building a multithreaded web server].
+New to Rust? Start with Phase 0. Already know Rust basics? Start with Phase 1.
+See [prerequisites][pre] for detailed guidance.
 
-To reiterate &mdash; read [The Rust Book] _before_ taking this course. It is not
-necessary to have more than novice-level knowledge or experience with Rust, but
-this course does not teach Rust basics.
 
-If you can check all the above boxes then you are ready for this course. If not,
-we have some [suggestions][pre] for how to learn the prerequisites.
+## Course structure
 
-Get started now - **[view the lesson plan][plan]**.
+Each phase consists of:
+
+1. **Building blocks**: Readings and small exercises to prepare for the project
+2. **Projects**: Scaffolded Cargo projects with complete test suites. You implement
+   the code to make the tests pass.
+
+Projects are self-contained. Each includes a `README.md` with a multi-part walkthrough,
+`Cargo.toml` with all dependencies, source stubs with `todo!()` markers, and a
+comprehensive test suite.
+
+**Estimated time**: 3-6 months full-time, or 6-12 months part-time.
+
+
+## All projects
+
+| # | Phase | Project | Key Topics |
+|---|-------|---------|------------|
+| 0a | Foundations | [Ownership Arena](projects/foundations-1/README.md) | Ownership, borrowing, lifetimes |
+| 0b | Foundations | [Type Machinist](projects/foundations-2/README.md) | Traits, generics, error handling |
+| 0c | Foundations | [Iterator Forge](projects/foundations-3/README.md) | Iterators, closures, lazy evaluation |
+| 0d | Foundations | [Smart Pointer Workshop](projects/foundations-4/README.md) | Smart pointers, interior mutability, macros |
+| 1 | Systems | [The Rust Toolbox](projects/project-1/README.md) | Cargo, CLI, data structures |
+| 2 | Systems | [Log-Structured File I/O](projects/project-2/README.md) | Serialization, file I/O, error handling |
+| 3 | Systems | [Synchronous Networking](projects/project-3/README.md) | TCP, traits, benchmarking |
+| 4 | Systems | [Concurrency](projects/project-4/README.md) | Thread pools, locks, channels |
+| 5 | Systems | [Async KV Store](projects/project-5/README.md) | tokio, async/await, spawn_blocking |
+| 6 | Web | [REST API with Axum](projects/web-1/README.md) | axum, tower, validation, CORS |
+| 7 | Web | [Database Layer](projects/web-2/README.md) | sqlx, PostgreSQL, migrations, transactions |
+| 8 | Web | [Auth & Authorization](projects/web-3/README.md) | JWT, argon2, RBAC |
+| 9 | Web | [gRPC and GraphQL](projects/web-4/README.md) | tonic, async-graphql, dataloaders |
+| 10 | Production | [Observability Stack](projects/prod-1/README.md) | tracing, Prometheus, health checks |
+| 11 | Production | [Testing Mastery](projects/prod-2/README.md) | proptest, fuzzing, insta, mockall |
+| 12 | Production | [Performance & Profiling](projects/prod-3/README.md) | criterion, flamegraphs, caching |
+| 13 | Production | [Deployment Pipeline](projects/prod-4/README.md) | Docker, config, graceful shutdown, CI/CD |
+| 14 | Advanced | [Message Queue Consumer](projects/advanced-1/README.md) | Redis streams, consumer groups, dead letters |
+| 15 | Advanced | [Caching & Rate Limiting](projects/advanced-2/README.md) | Multi-tier cache, token bucket, circuit breaker |
+| 16 | Advanced | [WebSocket Real-Time](projects/advanced-3/README.md) | WebSockets, DashMap, CRDT |
+| 17 | Advanced | [Background Job Processor](projects/advanced-4/README.md) | PostgreSQL job queue, SKIP LOCKED, workers |
+| 18 | Distributed | [Raft Consensus](projects/dist-1/README.md) | Leader election, log replication |
+| 19 | Distributed | [Percolator Transactions](projects/dist-2/README.md) | Snapshot isolation, 2PC |
+| 20 | Distributed | [Service Mesh](projects/dist-3/README.md) | Service discovery, sagas, distributed tracing |
+| 21 | Senior | [API Design & Versioning](projects/senior-1/README.md) | OpenAPI, utoipa, backward compatibility |
+| 22 | Senior | [Security Hardening](projects/senior-2/README.md) | OWASP, sanitization, HMAC, audit logging |
+| 23 | Senior | [System Design & Interview](projects/senior-3/README.md) | Design docs, capacity estimation, code review |
+| 24 | Capstone | [Production Backend Platform](projects/capstone/README.md) | Everything combined |
 
 
 ## Other courses in this series
 
-This course is part of a [series of courses] initiated by [PingCAP] to train
-students, contributors, new hires, and existing employees in Rust for
-distributed systems. Those who complete this one may wish to continue
-to [Distributed Systems in Rust].
-
-
-## A PingCAP-specific note
-
-This course, combined with [Deep Dive TiKV], and the [Distributed Systems in
-Rust] course is intended to be enough to enable programmers to meaningfully
-contribute to [TiKV]. It is most specifically designed to teach those in the
-Chinese Rust community enough Rust to work on TiKV. The language used is
-intended to be simple so that those who read only a little English can follow.
-If you find any of the language difficult to understand please [file issues].
+This course is part of a [series of courses] initiated by [PingCAP]. The distributed
+systems course at [courses/dss](../dss/README.md) provides the Raft and Percolator
+labs referenced in Phase 5.
 
 
 ## Contributing
@@ -122,9 +159,7 @@ See [CONTRIBUTING.md].
 
 ## License
 
-All text and code for this course is dual licensed [CC-BY 4.0] and [MIT]. You
-may freely reuse any material here under the terms of either or both, at your
-discretion.
+All text and code for this course is dual licensed [CC-BY 4.0] and [MIT].
 
 
 <!-- links -->
@@ -132,35 +167,9 @@ discretion.
 [CONTRIBUTING.md]: CONTRIBUTING.md
 [CC-BY 4.0]: https://opendefinition.org/licenses/cc-by/
 [MIT]: https://opensource.org/licenses/MIT
-[Deep Dive TiKV]: https://tikv.org/deep-dive/introduction/
-[Distributed Systems in Rust]: https://github.com/pingcap/talent-plan/tree/master/courses/dss
-[NewSQL]: https://en.wikipedia.org/wiki/NewSQL
-[NoSQL]: https://www.thoughtworks.com/insights/blog/nosql-databases-overview
 [PingCAP]: https://pingcap.com/
-[SQL]: https://en.wikipedia.org/wiki/SQL
-[The Rust Book]: https://doc.rust-lang.org/book/
 [The Rust Book]: https://doc.rust-lang.org/stable/book/
-[TiKV]: https://github.com/tikv/tikv/
-[asynchronous programming]: todo
-[bitcask]: https://github.com/basho/bitcask/blob/develop/doc/bitcask-intro.pdf
-[building a command-line program]: https://doc.rust-lang.org/stable/book/ch12-00-an-io-project.html
-[building a multithreaded web server]: https://doc.rust-lang.org/stable/book/ch20-00-final-project-a-web-server.html
-[clippy]: https://github.com/rust-lang/rust-clippy/
-[criterion]: https://github.com/bheisler/criterion.rs
-[crossbeam]: https://github.com/crossbeam-rs/crossbeam
-[file issues]: https://github.com/pingcap/talent-plan/issues/
-[futures]: https://docs.rs/futures/0.1.27/futures/
 [git]: https://git-scm.com/
-[kv]: https://en.wikipedia.org/wiki/Key-value_database
-[parallel programming]: todo
 [plan]: ./docs/lesson-plan.md
-[post-project surveys]: ./docs/lesson-plan.md#user-content-making-pna-rust-better
 [pre]: ./docs/prerequisites.md
-[programming a guessing game]: https://doc.rust-lang.org/stable/book/ch02-00-guessing-game-tutorial.html
-[rustfmt]: https://github.com/rust-lang/rustfmt/
-[serde]: https://github.com/serde-rs/serde
 [series of courses]: https://github.com/pingcap/talent-plan/
-[sp]: https://en.wikipedia.org/wiki/System_programming
-[the roadmap]: ./docs/roadmap.md
-[tokio]: https://github.com/tokio-rs/tokio
-[Rust]: https://www.rust-lang.org/

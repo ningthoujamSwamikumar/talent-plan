@@ -1,0 +1,10 @@
+[package]
+name = "smart-pointer-workshop"
+version = "0.1.0"
+edition = "2021"
+description = "Phase 0, Project 4: Smart Pointer Workshop - Smart pointers, interior mutability, and macros"
+
+[dependencies]
+derive-describe = { path = "derive-describe" }
+
+[dev-dependencies]

@@ -1,0 +1,8 @@
+[package]
+name = "ownership-arena"
+version = "0.1.0"
+edition = "2021"
+description = "Phase 0, Project 1: Ownership Arena - Master Rust's ownership model"
+
+[dev-dependencies]
+trybuild = "1.0"

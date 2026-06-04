@@ -1,336 +1,191 @@
-# PNA Rust Lesson plan
-
-A training course about practical systems software construction in Rust.
-
-Over a series of projects, you will build a networked [key-value database][kv],
-with multithreading and asynchronous I/O. In between projects you will study and
-practice individual subjects necessary to complete the next project. Along the
-way you will explore multiple designs and their tradeoffs.
-
-<!-- NOTE: keep the above in sync with README.md -->
-
-See [README.md] for the overview, goals, audience, and prerequisites.
-
-- [Prerequisites](#user-content-prerequisites)
-- [Getting the materials](#user-content-getting-the-materials)
-- [Course structure](#user-content-course-structure)
-- [Getting help](#user-content-getting-help)
-- [Making PNA Rust Better](#user-content-making-pna-rust-better)
-- [Practical Networked Applications in Rust](#user-content-practical-networked-applications-in-rust)
-  - [Building Blocks 1](#user-content-building-blocks-1)
-  - [Project 1: The Rust toolbox](#user-content-project-1-the-rust-toolbox)
-  - [Building Blocks 2](#user-content-building-blocks-2)
-  - [Project 2: Log-structured file I/O](#user-content-project-2-log-structured-file-io)
-  - [Building Blocks 3](#user-content-building-blocks-3)
-  - [Project 3: Synchronous client-server networking](#user-content-project-3-synchronous-client-server-networking)
-  - [Building Blocks 4](#user-content-building-blocks-4)
-  - [Project 4: Concurrency and Parallelism](#user-content-project-4-concurrency-and-parallelism)
-  - [Building Blocks 5](#user-content-building-blocks-5)
-  - [Project 5: Asynchronous programming in Rust](#user-content-project-5-asynchronous-programming-in-rust)
-- [What next?](#user-content-what-next)
-
-
-## Prerequisites
-
-As [described in the README.md][pre], this is not a course for novice
-programmers, and there are significant prerequisites. Ensure that you meet them
-all before proceeding.
-
-
-## Getting the materials
-
-All material for this course is in the
-
-> https://github.com/pingcap/talent-plan
-
-git repository on GitHub, in the [`rust` subdirectory][rs]. You will want a copy
-of it on your local computer, particularly for easy access to the conformance
-tests for each project.
-
-
-## Course structure
-
-The overall arc of the course is defined by a series of coding projects that
-incrementally introduce new subjects important to systems programming in Rust.
-Each project extends the previous project, so it is reasonable to simply start
-your work on each project in the same git repository where you left off on the
-previous (though you may want to add a [git tag] indicating where the previous
-project ended).
-
-[git tag]: https://git-scm.com/book/en/v2/Git-Basics-Tagging
-
-Because building an entire database from scratch while also learning all the
-concepts involved is a daunting task, each project is preceded by a "building
-blocks" section, where individual concepts are explored individually. These
-building blocks will consist of external readings, external programming
-problems, and other single-subject content.
-
-The building blocks sections are an opportunity to clear your mind, step away
-from the larger project, and focus your attention on learning and practicing a
-single subject in isolation. **Do not pass them up**.
-
-Each project builds on the last &mdash; the APIs, command-line interfaces, and
-parts of the implementation will often remain the same between projects, while
-you only integrate new features and improvements related to a project's subject
-matter. As such, it is ok to begin each project by copying your source code from
-the last.
-
-The projects live in the [`projects` subdirectory][psd], each in their own
-directories, and consist of a project description in `README.md`, and a Cargo
-project containing a complete example solution, and the project test suite. Each
-project comes with a test suite, and the project should not be considered
-finished until it passes with `cargo test`.
-
-**You should not read the example code for any project until completing the
-project yourself** &mdash; good learning requires trying on your own and failing, over
-and over until you succeed. You are encouraged though to learn from and apply
-techniques they contain to your own projects retroactively. Keep in mind though
-that the example projects are not the only way &mdash; or even the best way
-&mdash; to solve the problems. Trust yourself and your own creativity.
-
-<!-- TODO this is pretty harsh
-
-> RE plagiarism (this is mostly relevant to students being evaluated on their
-coursework): The line between applying techniques learned by code-reading and
-copying code outright can be hard to identify. But as a professional you have
-ethical responsibilites, and only you can know if you are upholding them. For
-those not being evaluated for their coursework, simply copying from the example
-isn't ; for those who are being evaluated, your instructors and evaluators are
-expecting you to use your own skills.
-
--->
-
-You will receive further instruction about setting up the source code and test
-suite, as well as project specifications, as you progress through the individual
-projects.
-
-The expected time to complete each section is not currently well-estimated, but
-both "building blocks" and "project" will probably take hours, not days, with
-the projects taking more time. If you are spending much less time than that, or
-are spending more time, don't worry: these are just bad estimates, and
-everybody's experience is different.
-
-
-## Getting help
-
-You will run into problems that you don't know how to solve. Don't suffer in
-silence. Everybody needs help sometimes.
-
-And fortunately the Rust community is amazing and welcoming, and wants to help
-you. As you are progressing through this course, you are _strongly_ encouraged
-to join the Rust community experience.
-
-Here are the resources you should consider turning to first:
-
-- The #rust-training channel on the [TiKV Slack]. This channel exists just for
-  this course. Please consider joining to support your fellow students and other
-  course-takers. There will always be someone there to answer questions, but
-  there may be a delay due to time zones and other factors. Both English and
-  Chinese languages are welcome here.
-
-- The `#beginners` channel on the official [Rust Discord]. You are almost
-  guaranteed to get some answer here, and if not, don't hesitate to ask again.
-  The people who hang out here are there specifically to help. Because of time
-  zone differences it may take time for somebody to respond. Only English will
-  be consistently understood here.
-
-- The QQ Rust group #1 ([QR code][qq]). For Chinese students, this is one of the
-  major Rust communities in China. This is a great place to hang out generally,
-  and for those unconfident in their English skills, a great place to ask
-  for help. There are also WeChat groups, but with their low population caps
-  and invite requirements, they are more difficult to deal with here.
-
-- The QQ Rust group #2 ([QR code][qq2]). Like the above. If group 1 is
-  at capacity you can get into this one.
-
-These resources may also be helpful:
-
-- The official [users forum]. Apply the "help" tag to your post. Questions
-  usually receive an answer here, but the responses can be limited.
-
-- [StackOverflow]. Apply the "rust" tag. You may or may not receive a satisfying
-  answer.
-
-You are also welcome to email the primary author of this course, [Brian
-Anderson][brson], at brian@pingcap.com. I will happily answer questions, and am
-eager to hear your experience with the course.
-
-Finally, if there is a [Rust meetup] near you, go check it out. As a Rust programmer
-these groups are where you will build some of your strongest connections. (Note
-that that link goes to the old Rust website and may not be up to date).
-
-
-## Making PNA Rust better
-
-<!-- TODO At the end of each project is a link to a survey about your experience. Please
-take a few minutes to complete it, and be comfortable expressing the challenges
-you faced, and your criticisms of the course. The survey results are not seen by
-anybody but the [primary author of the course][author], though aggregate
-statistics may be reported publicly. -->
-
-As you work through the course content, please be on the lookout for things you
-would improve about the course, and either [submit issues][si] explaining, or
-[submit pull requests][spr] with improvements. (If you are being graded,
-accepted pull requests to this or any other repo used in the course _may_ count
-toward extra credit during final evaluation &mdash; let your instructor or
-evaluator know!). This is an opportunity to gain experience contributing to an
-open-source Rust project. Make this a better course for the next person to take
-it than it was for you.
-
-See [CONTRIBUTING.md] for more.
-
-
-## Practical Networked Applications in Rust
-
-This is an outline of the course. Clicking each header will take you to the
-instructions for that section.
-
-### [Building Blocks 1][b1]
-
-**Topics**: CLI programming, the cargo manifest and environment variables,
-documenting Rust projects.
-
-
-### [Project 1: The Rust toolbox][p1]
-
-**Task**: Create an in-memory key/value store that passes simple tests and responds
-to command-line arguments.
-
-**Goals**:
-
-- Install the Rust compiler and tools
-- Learn the project structure used throughout this course
-- Use `cargo init` / `run` / `test` / `clippy` / `fmt`
-- Learn how to find and import crates from crates.io
-- Define an appropriate data type for a key-value store
-
-**Topics**: testing, the `clap` crate, `CARGO_VERSION` etc., the `clippy` and
-  `rustfmt` tools.
-
-**Extensions**: the `structopt` crate.
-
-
-### [Building Blocks 2][b2]
-
-**Topics**: log-structured file I/O, the bitcask algorithm, Rust error handling,
-comparing collection types.
-
-
-### [Project 2: Log-structured file I/O][p2]
-
-**Task**: Create a persistent key/value store that can be accessed from the
-command line.
-
-**Goals**:
-
-- Handle and report errors robustly
-- Use serde for serialization
-- Write data to disk as a log using standard file APIs
-- Read the state of the key/value store from disk
-- Map in-memory key-indexes to on-disk values
-- Periodically compact the log to remove stale data
-
-**Topics**: log-structured file I/O, bitcask, the `failure` crate, `Read` /
-`Write` traits, the `serde` crate.
-
-
-### [Building Blocks 3][b3]
-
-**Topics**: unstructured vs. structured logging, the Redis protocol,
-  benchmarking.
-
-
-### [Project 3: Synchronous client-server networking][p3]
-
-**Task**: Create a single-threaded, persistent key/value store server and client
-with synchronous networking over a custom protocol.
-
-**Goals**:
-
-- Create a client-server application
-- Write a custom protocol with `std` networking APIs
-- Introduce logging to the server
-- Implement pluggable backends with traits
-- Benchmark the hand-written backend against `sled`
-
-**Topics**: `std::net`, logging, traits, benchmarking.
-
-
-### [Building Blocks 4][b4]
-
-**Topics**: multithreading, thread pools, aliasing and mutability, concurrent
-data types.
-
-
-### [Project 4: Concurrency and parallelism][p4]
-
-**Task**: Create a multithreaded, persistent key/value store server and client
-with synchronous networking over a custom protocol.
-
-**Goals**:
-
-- Write a simple thread pool
-- Use channels for cross-thread communication
-- Share data structures with locks
-- Perform read operations without locks
-- Benchmark single-threaded vs multithreaded
-
-**Topics**: thread pools, channels, locks, lock-free data structures,
-  atomics, parameterized benchmarking.
-
-
-### Building Blocks 5
-
-Coming soon! ([preview][b5])
-
-
-### Project 5: Asynchronous programming in Rust
-
-Coming soon! ([preview][p5])
-
-
-## What next?
-
-So you have completed Practical Networked Applications in Rust. That's a Rusty
-accomplishment! Now you are on the path to being a great Rust programmer. Want
-to know where to go next on that path? We've got [some ideas][n].
-
-
-<!-- building block links -->
-
-[b1]: ../building-blocks/bb-1.md
-[b2]: ../building-blocks/bb-2.md
-[b3]: ../building-blocks/bb-3.md
-[b4]: ../building-blocks/bb-4.md
-[b5]: ../building-blocks/bb-5.md
-
-
-<!-- project links -->
-
-[p1]: ../projects/project-1/README.md
-[p2]: ../projects/project-2/README.md
-[p3]: ../projects/project-3/README.md
-[p4]: ../projects/project-4/README.md
-[p5]: ../projects/project-5/README.md
-
-
-<!-- other links -->
-
-[CONTRIBUTING.md]: ../CONTRIBUTING.md
-[README.md]: ../README.md
-[Rust Discord]: https://discord.gg/rust-lang
-[Rust meetup]: https://www.meetup.com/topics/rust
-[StackOverflow]: https://stackoverflow.com/questions/tagged/rust
-[TiKV Slack]: https://join.slack.com/t/tikv-wg/shared_invite/enQtNTUyODE4ODU2MzI0LWVlMWMzMDkyNWE5ZjY1ODAzMWUwZGVhNGNhYTc3MzJhYWE0Y2FjYjliYzY1OWJlYTc4OWVjZWM1NDkwN2QxNDE
-[author]: https://github.com/brson/
-[brson]: https://github.com/brson/
-[kv]: https://en.wikipedia.org/wiki/Key-value_database
-[pre]: ../README.md#user-content-prerequisites
-[psd]: https://github.com/pingcap/talent-plan/tree/master/courses/rust/projects
-[qq]: ./qq-qr.jpg
-[qq2]: ./qq2-qr.jpg
-[rs]: https://github.com/pingcap/talent-plan/tree/master/courses/rust
-[si]: https://github.com/pingcap/talent-plan/issues
-[spr]: https://github.com/pingcap/talent-plan/pulls
-[users forum]: https://users.rust-lang.org/
-[n]: ./what-next.md
+# Rust Backend Engineering — Lesson Plan
+
+This is the full lesson plan for the Rust Backend Engineering course. It covers
+8 phases, 26 projects, and takes you from Rust beginner to senior backend engineer.
+
+**Estimated total time**: 3-6 months full-time, 6-12 months part-time.
+
+---
+
+## Phase 0: Rust Foundations
+
+**Goal**: Master Rust's core language features through four focused projects.
+**Time estimate**: 2-4 weeks.
+**Prerequisites**: Programming experience in any language.
+
+| Step | Type | Link | Topics |
+|------|------|------|--------|
+| 1 | Building Block | [bb-0a](../building-blocks/bb-0a.md) | Ownership, borrowing, lifetimes |
+| 2 | **Project** | [Ownership Arena](../projects/foundations-1/README.md) | String interner, typed arena, compile-fail tests |
+| 3 | Building Block | [bb-0b](../building-blocks/bb-0b.md) | Traits, generics, error handling |
+| 4 | **Project** | [Type Machinist](../projects/foundations-2/README.md) | Transform pipeline, thiserror, From/Into |
+| 5 | Building Block | [bb-0c](../building-blocks/bb-0c.md) | Iterators, closures |
+| 6 | **Project** | [Iterator Forge](../projects/foundations-3/README.md) | Lazy CSV query engine, FromIterator |
+| 7 | Building Block | [bb-0d](../building-blocks/bb-0d.md) | Smart pointers, macros |
+| 8 | **Project** | [Smart Pointer Workshop](../projects/foundations-4/README.md) | Rc/Arc, RefCell/Mutex, derive macro |
+
+---
+
+## Phase 1: Systems Programming
+
+**Goal**: Build a networked, concurrent key-value store from scratch.
+**Time estimate**: 4-6 weeks.
+**Prerequisites**: Phase 0 or equivalent Rust knowledge.
+
+| Step | Type | Link | Topics |
+|------|------|------|--------|
+| 1 | Building Block | [bb-1](../building-blocks/bb-1.md) | CLI, Cargo, documentation |
+| 2 | **Project** | [The Rust Toolbox](../projects/project-1/README.md) | In-memory KV store, clap, clippy/rustfmt |
+| 3 | Building Block | [bb-2](../building-blocks/bb-2.md) | Log-structured storage, serde |
+| 4 | **Project** | [Log-Structured File I/O](../projects/project-2/README.md) | Persistent KV store, bitcask, compaction |
+| 5 | Building Block | [bb-3](../building-blocks/bb-3.md) | Networking, logging, benchmarking |
+| 6 | **Project** | [Synchronous Networking](../projects/project-3/README.md) | Client-server, pluggable engines, criterion |
+| 7 | Building Block | [bb-4](../building-blocks/bb-4.md) | Threading, concurrency |
+| 8 | **Project** | [Concurrency](../projects/project-4/README.md) | Thread pools, locks, channels, crossbeam |
+| 9 | Building Block | [bb-5](../building-blocks/bb-5.md) | Async Rust, tokio |
+| 10 | **Project** | [Async KV Store](../projects/project-5/README.md) | tokio, async/await, spawn_blocking |
+
+---
+
+## Phase 2: Backend Web Development
+
+**Goal**: Build a production-quality web API with database, auth, and multiple protocols.
+**Time estimate**: 4-6 weeks.
+**Prerequisites**: Phase 1.
+
+| Step | Type | Link | Topics |
+|------|------|------|--------|
+| 1 | Building Block | [bb-web-1](../building-blocks/bb-web-1.md) | axum, tower, HTTP APIs |
+| 2 | **Project** | [REST API with Axum](../projects/web-1/README.md) | CRUD, validation, pagination, middleware |
+| 3 | Building Block | [bb-web-2](../building-blocks/bb-web-2.md) | PostgreSQL, sqlx |
+| 4 | **Project** | [Database Layer](../projects/web-2/README.md) | Migrations, repository pattern, transactions |
+| 5 | Building Block | [bb-web-3](../building-blocks/bb-web-3.md) | JWT, auth, security |
+| 6 | **Project** | [Auth & Authorization](../projects/web-3/README.md) | JWT, argon2, RBAC, refresh tokens, API keys |
+| 7 | Building Block | [bb-web-4](../building-blocks/bb-web-4.md) | gRPC, GraphQL |
+| 8 | **Project** | [gRPC and GraphQL](../projects/web-4/README.md) | tonic, protobuf, async-graphql, dataloaders |
+
+---
+
+## Phase 3: Production Engineering
+
+**Goal**: Make your service production-ready with observability, testing, performance, and deployment.
+**Time estimate**: 3-5 weeks.
+**Prerequisites**: Phase 2.
+
+| Step | Type | Link | Topics |
+|------|------|------|--------|
+| 1 | Building Block | [bb-prod-1](../building-blocks/bb-prod-1.md) | tracing, metrics, OpenTelemetry |
+| 2 | **Project** | [Observability Stack](../projects/prod-1/README.md) | Structured logging, Prometheus, health checks |
+| 3 | Building Block | [bb-prod-2](../building-blocks/bb-prod-2.md) | Property testing, fuzzing |
+| 4 | **Project** | [Testing Mastery](../projects/prod-2/README.md) | proptest, insta, mockall, test strategies |
+| 5 | Building Block | [bb-prod-3](../building-blocks/bb-prod-3.md) | Profiling, optimization |
+| 6 | **Project** | [Performance & Profiling](../projects/prod-3/README.md) | criterion, flamegraphs, moka caching, Cow |
+| 7 | Building Block | [bb-prod-4](../building-blocks/bb-prod-4.md) | Docker, config, deployment |
+| 8 | **Project** | [Deployment Pipeline](../projects/prod-4/README.md) | Dockerfile, config crate, graceful shutdown, CI |
+
+---
+
+## Phase 4: Advanced Backend Patterns
+
+**Goal**: Learn the patterns that distinguish senior engineers: event-driven systems,
+caching, real-time, and background processing.
+**Time estimate**: 4-6 weeks.
+**Prerequisites**: Phase 3.
+
+| Step | Type | Link | Topics |
+|------|------|------|--------|
+| 1 | Building Block | [bb-adv-1](../building-blocks/bb-adv-1.md) | Message queues, event-driven |
+| 2 | **Project** | [Message Queue Consumer](../projects/advanced-1/README.md) | Redis streams, consumer groups, dead letters |
+| 3 | Building Block | [bb-adv-2](../building-blocks/bb-adv-2.md) | Caching, rate limiting, resilience |
+| 4 | **Project** | [Caching & Rate Limiting](../projects/advanced-2/README.md) | Multi-tier cache, token bucket, circuit breaker |
+| 5 | Building Block | [bb-adv-3](../building-blocks/bb-adv-3.md) | WebSockets, real-time |
+| 6 | **Project** | [WebSocket Real-Time](../projects/advanced-3/README.md) | WS lifecycle, rooms, presence, CRDT |
+| 7 | Building Block | [bb-adv-4](../building-blocks/bb-adv-4.md) | Background jobs |
+| 8 | **Project** | [Background Job Processor](../projects/advanced-4/README.md) | PostgreSQL queue, SKIP LOCKED, workers |
+
+---
+
+## Phase 5: Distributed Systems
+
+**Goal**: Understand and implement fundamental distributed algorithms and service patterns.
+**Time estimate**: 4-8 weeks.
+**Prerequisites**: Phase 4.
+
+| Step | Type | Link | Topics |
+|------|------|------|--------|
+| 1 | Building Block | [bb-dist-1](../building-blocks/bb-dist-1.md) | Raft paper, consensus |
+| 2 | **Project** | [Raft Consensus](../projects/dist-1/README.md) | Leader election, log replication, persistence |
+| 3 | Building Block | [bb-dist-2](../building-blocks/bb-dist-2.md) | Percolator paper, transactions |
+| 4 | **Project** | [Percolator Transactions](../projects/dist-2/README.md) | Snapshot isolation, 2PC, TSO |
+| 5 | Building Block | [bb-dist-3](../building-blocks/bb-dist-3.md) | Service discovery, sagas |
+| 6 | **Project** | [Service Mesh](../projects/dist-3/README.md) | Registry, load balancing, sagas, idempotency |
+
+---
+
+## Phase 6: Senior Engineering Skills
+
+**Goal**: Develop the judgment, communication, and security awareness of a senior engineer.
+**Time estimate**: 2-4 weeks.
+**Prerequisites**: Phase 5.
+
+| Step | Type | Link | Topics |
+|------|------|------|--------|
+| 1 | Building Block | [bb-sr-1](../building-blocks/bb-sr-1.md) | API design, versioning |
+| 2 | **Project** | [API Design & Versioning](../projects/senior-1/README.md) | OpenAPI, utoipa, deprecation, SDK gen |
+| 3 | Building Block | [bb-sr-2](../building-blocks/bb-sr-2.md) | Security, OWASP |
+| 4 | **Project** | [Security Hardening](../projects/senior-2/README.md) | Sanitization, HMAC, audit logging, cargo-audit |
+| 5 | Building Block | [bb-sr-3](../building-blocks/bb-sr-3.md) | System design, interviews |
+| 6 | **Project** | [System Design & Interview](../projects/senior-3/README.md) | Design docs, URL shortener, code review |
+
+---
+
+## Phase 7: Capstone
+
+**Goal**: Integrate everything into a single production-grade system.
+**Time estimate**: 2-4 weeks.
+**Prerequisites**: All previous phases.
+
+| Step | Type | Link | Topics |
+|------|------|------|--------|
+| 1 | **Project** | [Production Backend Platform](../projects/capstone/README.md) | Everything |
+
+The capstone has no building block. By this point, you should be self-sufficient.
+
+---
+
+## Skills Mapped to Job Requirements
+
+After completing this course, you can confidently claim these skills on a resume:
+
+| Job Requirement | Where You Learned It |
+|----------------|---------------------|
+| Rust proficiency | Phases 0-1 |
+| REST API development | Phase 2 (web-1, web-3) |
+| PostgreSQL / SQL | Phase 2 (web-2), Phase 4 (advanced-4) |
+| gRPC / Protocol Buffers | Phase 2 (web-4) |
+| GraphQL | Phase 2 (web-4) |
+| Authentication (JWT, OAuth) | Phase 2 (web-3) |
+| Message queues (Redis, NATS) | Phase 4 (advanced-1) |
+| Caching (Redis, in-memory) | Phase 4 (advanced-2) |
+| WebSockets / real-time | Phase 4 (advanced-3) |
+| Background job processing | Phase 4 (advanced-4) |
+| Observability (logs, metrics, traces) | Phase 3 (prod-1) |
+| Testing (unit, integration, property) | Phase 3 (prod-2) |
+| Performance optimization | Phase 3 (prod-3) |
+| Docker / containerization | Phase 3 (prod-4) |
+| CI/CD | Phase 3 (prod-4) |
+| Distributed systems (Raft, 2PC) | Phase 5 |
+| API design and versioning | Phase 6 (senior-1) |
+| Security (OWASP) | Phase 6 (senior-2) |
+| System design interviews | Phase 6 (senior-3) |
+
+---
+
+## How to use this course
+
+1. **Start at your level**: New to Rust → Phase 0. Know Rust basics → Phase 1. Experienced Rustacean → Phase 2.
+2. **Read the building block first**: Don't skip the readings. They provide context.
+3. **Make the tests pass**: Each project has a test suite. Implement code until all tests pass.
+4. **Don't look at solutions**: The learning happens in the struggle.
+5. **Move forward even if imperfect**: A passing solution beats a perfect one you never finish.
+6. **Build the capstone**: This is where everything comes together. Don't skip it.

@@ -1,0 +1,21 @@
+[package]
+name = "job-processor"
+version = "0.1.0"
+edition = "2021"
+description = "Phase 4, Project 4: Background Job Processor"
+
+[dependencies]
+tokio = { version = "1", features = ["full", "signal"] }
+sqlx = { version = "0.7", features = ["runtime-tokio", "postgres", "uuid", "chrono", "json", "migrate"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+thiserror = "1.0"
+async-trait = "0.1"
+cron = "0.12"
+
+[dev-dependencies]
+dotenvy = "0.15"

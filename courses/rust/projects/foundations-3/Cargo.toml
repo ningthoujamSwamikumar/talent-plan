@@ -1,0 +1,5 @@
+[package]
+name = "iterator-forge"
+version = "0.1.0"
+edition = "2021"
+description = "Phase 0, Project 3: Iterator Forge - Master iterators and closures"
