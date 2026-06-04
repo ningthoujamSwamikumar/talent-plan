@@ -36,11 +36,34 @@ complete the readings below.
 3. Give clients migration time (weeks/months)
 4. Remove after sunset date
 
+## Exercises
+
+1. **Classify changes as breaking or safe.** For each change below, state
+   whether it's backward-compatible. If breaking, describe how to make it safe:
+   - Adding a `tags` field to a response body
+   - Renaming `user_name` to `username` in a response body
+   - Making the `description` request field required (was optional)
+   - Changing `GET /users/:id` to `GET /v2/users/:id`
+   - Changing a field from `string` to `number` in the response
+   - Adding a new optional query parameter `?sort_by=`
+
+2. **Design an API evolution.** You have `POST /orders` that accepts
+   `{product_id, quantity}`. You need to add support for discount codes:
+   `{product_id, quantity, discount_code}`. Write the exact steps to evolve
+   the API without breaking existing clients, including what happens on the
+   server when `discount_code` is absent.
+
+3. **Write OpenAPI for a small API.** By hand (not generated), write the
+   OpenAPI 3.0 YAML for an API with 3 endpoints: create task, get task, list
+   tasks. Include request/response schemas, error responses, and pagination
+   parameters.
+
 ## You're ready when...
 
 - [ ] You can explain 3 API versioning strategies and their tradeoffs
 - [ ] You know what makes a change backward-compatible
 - [ ] You understand OpenAPI/Swagger and why it matters
 - [ ] You can describe a deprecation workflow
+- [ ] You can classify any API change as breaking or safe
 
 Next: [Project: API Design & Versioning](../projects/senior-1/README.md)

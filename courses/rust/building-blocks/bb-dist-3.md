@@ -67,3 +67,13 @@ idempotency keys: repeating a request with the same key produces the same result
 - [ ] You can implement basic load balancing algorithms
 
 Next: [Project: Service Mesh Fundamentals](../projects/dist-3/README.md)
+
+---
+
+### Career Checkpoint
+
+You're deep into distributed systems now — the territory that separates senior
+engineers from everyone else. Start browsing open source issues in projects
+you've used during this course (tokio, axum, sqlx, tonic). Look at "good first
+issue" labels. Read a few merged PRs to understand the review culture. You don't
+need to contribute yet, but by Phase 8 you should have a target project in mind.

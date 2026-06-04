@@ -81,3 +81,13 @@ verify that in-flight requests complete before the process exits.
 - [ ] You can set up a basic CI pipeline for a Rust project
 
 Next: [Project: Deployment Pipeline](../projects/prod-4/README.md)
+
+---
+
+### Career Checkpoint
+
+Your projects are now portfolio-worthy. After finishing Phase 3, go back and
+clean up the READMEs for your Phase 1 and Phase 2 projects. Add architecture
+descriptions, setup instructions, and any benchmark results. You'll polish
+these further in Phase 9, but starting now means less work later. Think of
+every project from this point forward as something a hiring manager might see.

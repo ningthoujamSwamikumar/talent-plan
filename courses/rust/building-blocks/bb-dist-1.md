@@ -37,11 +37,32 @@ servers crash or messages are lost.
 3. Log Matching: if two logs have same index+term, all preceding entries match
 4. Leader Completeness: committed entries appear in all future leaders' logs
 
+## Exercises
+
+1. **Trace through a leader election by hand.** Three servers: S1, S2, S3. S1
+   is the leader in term 1. S1 crashes. Walk through every RPC message until a
+   new leader is elected. Note: what term is the new leader in? What happens
+   when S1 comes back?
+
+2. **Trace through log replication.** Leader has log entries [A, B, C]. Follower
+   has [A, B]. Leader sends AppendEntries. Walk through the message exchange
+   until the follower's log matches the leader's and the entries are committed.
+
+3. **Trace through a partition scenario.** Five servers: S1 (leader), S2, S3,
+   S4, S5. Network partitions into {S1, S2} and {S3, S4, S5}. A client sends
+   a write to S1. Another client sends a write to S3 (which will elect a new
+   leader). What happens when the partition heals? Walk through every step.
+
+4. **Identify the bug.** A Raft implementation allows a leader in term 3 to
+   commit an entry from term 2 by counting replicas. Why is this unsafe? (Hint:
+   read the Raft paper Figure 8 and the paragraph about it.)
+
 ## You're ready when...
 
-- [ ] You can explain Raft's leader election algorithm
-- [ ] You understand log replication and commitment
-- [ ] You know what happens during a network partition
-- [ ] You've read the Raft paper at least once
+- [ ] You can explain Raft's leader election algorithm from memory
+- [ ] You understand log replication, commitment, and the role of `matchIndex`
+- [ ] You know what happens during a network partition and how safety is maintained
+- [ ] You can trace through Figure 8 in the paper and explain why it matters
+- [ ] You've read the Raft paper at least once (twice is better)
 
-Next: [Raft Lab](../../dss/raft/README.md)
+Next: [Raft Consensus](../projects/dist-1/README.md)

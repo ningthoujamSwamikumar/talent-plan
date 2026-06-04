@@ -203,3 +203,14 @@ Pass `Arc<AppState>` to handlers via axum's State extractor.
 | GET | /metrics | No | Prometheus metrics |
 
 Good luck. This is the hardest project in the course -- and the most rewarding.
+
+---
+
+### Career Checkpoint
+
+When you finish the capstone, **deploy it**. Get a live URL. This is your
+flagship portfolio piece — the project you'll talk about in every interview.
+In Phase 9 you'll polish the README and write about it, but having a running
+deployment from day one demonstrates that you don't just write code, you ship
+products. Use Fly.io, Railway, Render, or Shuttle — all have free tiers that
+work for this.

@@ -131,3 +131,14 @@ channels. One producer task sends messages, multiple consumer tasks process them
 - [ ] You're not afraid of `Pin` (even if you don't fully understand it)
 
 Next: [Project 5: Asynchronous KV Store](../projects/project-5/README.md)
+
+---
+
+### Career Checkpoint
+
+You've finished Phase 1. Start building your professional network now — don't
+wait until you're job searching. Join the [Rust Discord](https://discord.gg/rust-lang),
+subscribe to [This Week in Rust](https://this-week-in-rust.org/), and browse
+[r/rust](https://www.reddit.com/r/rust/) regularly. Follow Rust projects on GitHub
+that interest you. The goal isn't to contribute yet — it's to absorb how the
+community works so you're ready when the time comes in Phase 8.
