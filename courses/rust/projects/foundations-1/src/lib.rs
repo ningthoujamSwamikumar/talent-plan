@@ -8,7 +8,7 @@
 //!
 //! Together they illustrate ownership, borrowing, lifetimes, and interior mutability.
 
-use std::collections::HashMap;
+use std::{cell::RefCell, collections::HashMap};
 
 // ---------------------------------------------------------------------------
 // Part 1 & 2: String Interner
@@ -68,13 +68,17 @@ pub struct StringInterner {
     // Think about *who owns* each `String`.  The `Vec` owns the canonical
     // copy; the `HashMap` needs to look strings up — consider what key type
     // lets you avoid a second allocation.
-    _private: (), // remove this when you add real fields
+    storage: Vec<String>,
+    index: HashMap<String, usize>,
 }
 
 impl StringInterner {
     /// Creates a new, empty interner.
     pub fn new() -> Self {
-        todo!("Part 1: initialize the interner's internal storage")
+        Self {
+            storage: Vec::new(),
+            index: HashMap::new(),
+        }
     }
 
     /// Interns a string, returning its unique [`InternId`].
@@ -88,7 +92,15 @@ impl StringInterner {
     /// * `s` — a string slice.  The interner will allocate its own `String` if
     ///   the value has not been seen before.
     pub fn intern(&mut self, s: &str) -> InternId {
-        todo!("Part 1: deduplicate the string and return an InternId")
+        match self.index.get(s) {
+            Some(id) => InternId(*id),
+            None => {
+                let id = self.storage.len();
+                self.storage.push(s.to_string());
+                self.index.insert(s.to_string(), id);
+                InternId(id)
+            }
+        }
     }
 
     /// Looks up a previously interned string by its [`InternId`].
@@ -108,17 +120,17 @@ impl StringInterner {
     /// So the reference is valid as long as the interner is not dropped or
     /// mutably borrowed.
     pub fn get(&self, id: InternId) -> Option<&str> {
-        todo!("Part 2: return a reference to the stored string")
+        self.storage.get(id.as_raw()).map(|v| v.as_str())
     }
 
     /// Returns the number of unique strings currently interned.
     pub fn len(&self) -> usize {
-        todo!("Part 1: return the count of unique strings")
+        self.storage.len()
     }
 
     /// Returns `true` if no strings have been interned.
     pub fn is_empty(&self) -> bool {
-        todo!("Part 1: check whether the interner is empty")
+        self.storage.is_empty()
     }
 }
 
@@ -172,13 +184,15 @@ pub struct Arena<T> {
     //     move when the Vec grows.
     //
     // After adding the field, remove the PhantomData below.
-    _marker: std::marker::PhantomData<T>,
+    storage: RefCell<Vec<Box<T>>>,
 }
 
 impl<T> Arena<T> {
     /// Creates a new, empty arena.
     pub fn new() -> Self {
-        todo!("Part 3: initialize the arena")
+        Self {
+            storage: RefCell::new(Vec::new()),
+        }
     }
 
     /// Allocates a value in the arena and returns a shared reference to it.
@@ -191,7 +205,15 @@ impl<T> Arena<T> {
     /// Panics if the internal `RefCell` is already mutably borrowed (this
     /// should not happen in normal single-threaded use).
     pub fn alloc(&self, value: T) -> &T {
-        todo!("Part 3: box the value, push it, and return a reference")
+        self.storage.borrow_mut().push(Box::new(value));
+        if let Some(last_val) = self.storage.borrow().last() {
+            // SAFETY: The Box ensures a stable heap address. The arena never removes
+            // or replaces elements, so pointer remains valid for the arena's 
+            // lifetime. We tie output lifetime to `&self` (the arena), which is correct.
+            unsafe { &*(&**last_val as *const T) }
+        }else{
+            panic!("Called last on empty vec")
+        }
         //
         // Hint (high-level steps):
         //   1. `self.storage.borrow_mut().push(Box::new(value));`
@@ -207,12 +229,12 @@ impl<T> Arena<T> {
 
     /// Returns the number of values currently allocated in the arena.
     pub fn len(&self) -> usize {
-        todo!("Part 3: return the count of allocated values")
+        self.storage.borrow().len()
     }
 
     /// Returns `true` if no values have been allocated.
     pub fn is_empty(&self) -> bool {
-        todo!("Part 3: check whether the arena is empty")
+        self.storage.borrow().is_empty()
     }
 }
 
@@ -261,11 +283,11 @@ impl<'a> Document<'a> {
     /// Both `title` and every element of `tags` must borrow from the same
     /// source (or at least live as long as `'a`).
     pub fn new(title: &'a str, tags: Vec<&'a str>) -> Self {
-        todo!("Part 4: construct the Document")
+        Self { title, tags }
     }
 
     /// Returns `true` if the document has been tagged with `tag`.
     pub fn has_tag(&self, tag: &str) -> bool {
-        todo!("Part 4: check whether `tag` is in `self.tags`")
+        self.tags.contains(&tag)
     }
 }

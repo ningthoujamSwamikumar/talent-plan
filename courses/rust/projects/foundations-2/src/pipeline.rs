@@ -17,7 +17,9 @@ pub struct Pipeline {
 impl Pipeline {
     /// Create a new, empty pipeline.
     pub fn new() -> Self {
-        todo!("Implement Pipeline::new")
+        Self {
+            transforms: Vec::new(),
+        }
     }
 
     /// Append a transform to the end of the pipeline.
@@ -27,7 +29,7 @@ impl Pipeline {
     where
         T: Transform<Error = PipelineError> + 'static,
     {
-        todo!("Implement Pipeline::add_transform")
+        self.transforms.push(Box::new(transform));
     }
 
     /// Run the pipeline: feed `input` through each transform in order.
@@ -35,17 +37,22 @@ impl Pipeline {
     /// The output of each transform becomes the input of the next. Returns the
     /// final output or the first error encountered.
     pub fn run(&self, input: &str) -> Result<String, PipelineError> {
-        todo!("Implement Pipeline::run")
+        self.transforms
+            .iter()
+            .fold(Ok(input.to_string()), |acc, transformer| {
+                let input = acc?;
+                transformer.transform(input.as_str())
+            })
     }
 
     /// Return the number of transforms in the pipeline.
     pub fn len(&self) -> usize {
-        todo!("Implement Pipeline::len")
+        self.transforms.len()
     }
 
     /// Return `true` if the pipeline contains no transforms.
     pub fn is_empty(&self) -> bool {
-        todo!("Implement Pipeline::is_empty")
+        self.transforms.is_empty()
     }
 }
 
@@ -76,7 +83,9 @@ pub struct PipelineBuilder {
 impl PipelineBuilder {
     /// Create a new, empty builder.
     pub fn new() -> Self {
-        todo!("Implement PipelineBuilder::new")
+        Self {
+            transforms: Vec::new(),
+        }
     }
 
     /// Add a transform to the builder. Consumes and returns `Self` for chaining.
@@ -84,12 +93,15 @@ impl PipelineBuilder {
     where
         T: Transform<Error = PipelineError> + 'static,
     {
-        todo!("Implement PipelineBuilder::add")
+        self.transforms.push(Box::new(transform));
+        self
     }
 
     /// Consume the builder and produce a [`Pipeline`].
     pub fn build(self) -> Pipeline {
-        todo!("Implement PipelineBuilder::build")
+        Pipeline {
+            transforms: self.transforms,
+        }
     }
 }
 

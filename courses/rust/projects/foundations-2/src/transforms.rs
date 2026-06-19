@@ -1,4 +1,6 @@
-use std::str::FromStr;
+use std::{collections::HashMap, str::FromStr};
+
+use serde_json::Value;
 
 use crate::error::{CsvParseError, JsonError, PipelineError};
 
@@ -36,7 +38,7 @@ impl Transform for Uppercase {
 
     /// Return the input converted to uppercase.
     fn transform(&self, input: &str) -> Result<String, Self::Error> {
-        todo!("Implement Uppercase::transform")
+        Ok(input.to_uppercase())
     }
 
     fn name(&self) -> &str {
@@ -56,7 +58,7 @@ impl Transform for Lowercase {
 
     /// Return the input converted to lowercase.
     fn transform(&self, input: &str) -> Result<String, Self::Error> {
-        todo!("Implement Lowercase::transform")
+        Ok(input.to_lowercase())
     }
 
     fn name(&self) -> &str {
@@ -76,7 +78,7 @@ impl Transform for TrimWhitespace {
 
     /// Return the input with leading/trailing whitespace removed.
     fn transform(&self, input: &str) -> Result<String, Self::Error> {
-        todo!("Implement TrimWhitespace::transform")
+        Ok(input.trim().to_string())
     }
 
     fn name(&self) -> &str {
@@ -113,7 +115,37 @@ impl Transform for CsvToJson {
 
     /// Parse CSV `input` and return a JSON array string.
     fn transform(&self, input: &str) -> Result<String, Self::Error> {
-        todo!("Implement CsvToJson::transform")
+        let mut json_array = Vec::new();
+
+        let mut lines_iter = input.split("\n");
+        let Some(headers) = lines_iter.next() else {
+            return Err(PipelineError::CsvParse(CsvParseError {
+                message: "Invalid content!".to_string(),
+            }));
+        };
+
+        let headers: Vec<_> = headers.split(",").collect();
+        let max_col = headers.len();
+
+        while let Some(line) = lines_iter.next() {
+            let mut json_value: HashMap<String, String> = HashMap::new();
+            for (i, val) in line.split(",").enumerate() {
+                if i >= max_col {
+                    return Err(PipelineError::CsvParse(CsvParseError {
+                        message: "Value exceed maximum column index".to_string(),
+                    }));
+                }
+
+                json_value.insert(headers[i].to_string(), val.to_string());
+            }
+            json_array.push(json_value);
+        }
+
+        Ok(serde_json::to_string(&json_array).map_err(|e| {
+            PipelineError::Json(JsonError {
+                message: e.to_string(),
+            })
+        })?)
     }
 
     fn name(&self) -> &str {
@@ -133,7 +165,23 @@ impl Transform for JsonPrettify {
 
     /// Parse `input` as JSON and return a pretty-printed version.
     fn transform(&self, input: &str) -> Result<String, Self::Error> {
-        todo!("Implement JsonPrettify::transform")
+        let json_value: Value = serde_json::from_str(input).map_err(|e| {
+            PipelineError::Json(JsonError {
+                message: format!(
+                    "Failed to read json from input string. Error: {:#?}",
+                    e.to_string()
+                ),
+            })
+        })?;
+
+        Ok(serde_json::to_string_pretty(&json_value).map_err(|e| {
+            PipelineError::Json(JsonError {
+                message: format!(
+                    "Failed to create pretty json string. Error: {}",
+                    e.to_string()
+                ),
+            })
+        })?)
     }
 
     fn name(&self) -> &str {
@@ -164,7 +212,16 @@ impl FromStr for TransformKind {
     ///
     /// Return `PipelineError::UnknownTransform` for unrecognized input.
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        todo!("Implement FromStr for TransformKind")
+        match s {
+            "json_prettify" => Ok(Self::JsonPrettify),
+            "csv_to_json" => Ok(Self::CsvToJson),
+            "trim_whitespace" => Ok(Self::TrimWhitespace),
+            "lowercase" => Ok(Self::Lowercase),
+            "uppercase" => Ok(Self::Uppercase),
+            _ => Err(PipelineError::UnknownTransform(
+                "Input doesn't match any Transform Kind!".to_string(),
+            )),
+        }
     }
 }
 
@@ -185,6 +242,8 @@ impl TryFrom<&str> for TransformSpec {
 
     /// Parse a transform name (e.g. `"csv_to_json"`) into a `TransformSpec`.
     fn try_from(value: &str) -> Result<Self, Self::Error> {
-        todo!("Implement TryFrom<&str> for TransformSpec")
+        Ok(Self {
+            kind: TransformKind::from_str(value)?,
+        })
     }
 }
