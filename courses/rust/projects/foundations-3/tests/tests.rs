@@ -19,6 +19,7 @@ fn numeric_csv() -> &'static str {
 #[test]
 fn test_csv_reader_parses_headers_and_rows() {
     let rows: Vec<Row> = CsvReader::new(sample_csv()).collect();
+    println!("rows: {:?}", rows);
     assert_eq!(rows.len(), 3);
     assert_eq!(rows[0].get("name"), Some("Alice"));
     assert_eq!(rows[0].get("age"), Some("30"));
@@ -35,6 +36,7 @@ fn test_csv_reader_second_and_third_rows() {
 #[test]
 fn test_csv_reader_empty_input() {
     let rows: Vec<Row> = CsvReader::new("").collect();
+    println!("row: {:?}", rows);
     assert!(rows.is_empty());
 }
 
@@ -52,7 +54,6 @@ fn test_csv_reader_header_only() {
 fn test_csv_reader_is_lazy() {
     // Creating a CsvReader and taking only the first element should NOT
     // require the entire input to be processed.
-    use std::cell::Cell;
 
     let csv = "x\n1\n2\n3\n4\n5\n";
     let mut reader = CsvReader::new(csv);
@@ -76,7 +77,7 @@ fn test_query_chain_is_lazy_with_side_effects() {
     let counter = Cell::new(0u32);
     let csv = "val\n1\n2\n3\n4\n5\n";
 
-    let mut query_iter = Query::new(CsvReader::new(csv))
+    let mut _query_iter = Query::new(CsvReader::new(csv))
         .filter_rows(|row| {
             counter.set(counter.get() + 1);
             let v: i32 = row.get("val").unwrap().parse().unwrap();
@@ -89,14 +90,17 @@ fn test_query_chain_is_lazy_with_side_effects() {
     // build the pipeline and only pull one element, fewer rows are visited.
     let counter2 = Cell::new(0u32);
     let reader = CsvReader::new(csv);
-    let query = Query::new(reader)
-        .filter_rows(|row| {
-            counter2.set(counter2.get() + 1);
-            let v: i32 = row.get("val").unwrap().parse().unwrap();
-            v > 3
-        });
+    let _query = Query::new(reader).filter_rows(|row| {
+        counter2.set(counter2.get() + 1);
+        let v: i32 = row.get("val").unwrap().parse().unwrap();
+        v > 3
+    });
     // The pipeline has been built but counter2 is still 0 — no work done yet.
-    assert_eq!(counter2.get(), 0, "Lazy pipeline must not evaluate until consumed");
+    assert_eq!(
+        counter2.get(),
+        0,
+        "Lazy pipeline must not evaluate until consumed"
+    );
 }
 
 // ===========================================================================
@@ -168,6 +172,7 @@ fn test_chained_filter_map_select() {
         .select(&["name", "age"])
         .collect_rows();
 
+    println!("rows: {:?}", rows);
     assert_eq!(rows.len(), 2); // Alice (30) and Carol (35)
     assert_eq!(rows[0].get("name"), Some("ALICE"));
     assert_eq!(rows[1].get("name"), Some("CAROL"));
@@ -212,6 +217,7 @@ fn test_max() {
 #[test]
 fn test_aggregation_on_empty_result() {
     let empty = "x\n";
+    println!("rows: {:?}", CsvReader::new(empty).collect::<Vec<_>>());
     assert_eq!(Query::new(CsvReader::new(empty)).count(), 0);
     assert_eq!(Query::new(CsvReader::new(empty)).sum("x"), 0.0);
     assert_eq!(Query::new(CsvReader::new(empty)).avg("x"), 0.0);
@@ -226,6 +232,7 @@ fn test_aggregation_on_empty_result() {
 #[test]
 fn test_collect_rows_to_csv_string() {
     let csv_out: String = CsvReader::new(sample_csv()).collect();
+    println!("csv_out: {:?}", csv_out);
 
     // The output should contain the header and all data rows.
     let lines: Vec<&str> = csv_out.trim().lines().collect();
